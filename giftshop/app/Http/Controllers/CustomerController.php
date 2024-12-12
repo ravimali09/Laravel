@@ -11,6 +11,8 @@ use App\MaiL\welcomemail;
 use App\MaiL\forgetMail;
 use Illuminate\Support\Facades\Mail;
 
+use Illuminate\Support\Facades\Validator;
+
 class CustomerController extends Controller
 {
     /**
@@ -38,25 +40,25 @@ class CustomerController extends Controller
     }
     public function profile()
     {
-        $id=session()->get('user_id');
-        $data=customer::where('id',$id)->first();
-        return view('website.profile',['customer'=>$data]);
-    }
-    
-    public function edituser(customer $user,$id)
-    {
-        $data=customer::find($id);
-        return view('website.edituser',['customer'=>$data]);
+        $id = session()->get('user_id');
+        $data = customer::where('id', $id)->first();
+        return view('website.profile', ['customer' => $data]);
     }
 
-     public function update(Request $request, customer $user,$id)
+    public function edituser(customer $user, $id)
     {
-       
-        $data=customer::find($id);
+        $data = customer::find($id);
+        return view('website.edituser', ['customer' => $data]);
+    }
 
-        $data->cust_name=$request->cust_name;
-        $data->email=$request->email;
-        
+    public function update(Request $request, customer $user, $id)
+    {
+
+        $data = customer::find($id);
+
+        $data->cust_name = $request->cust_name;
+        $data->email = $request->email;
+
         $data->update();
         echo "<script> 
         alert('Profile Update Success !'); 
@@ -70,66 +72,54 @@ class CustomerController extends Controller
     }
     public function user_auth(Request $request)
     {
-    
+
         $validated = $request->validate([
-            'email'=> 'required|email',
-            'password'=> 'required|'
+            'email' => 'required|email',
+            'password' => 'required|'
         ], [
             'email.required' => 'Bhai Email Kon Daalega?',
             'email.email' => 'Kya yar Kuch bhi daal rha hai.',
             'password.required' => 'Bhai Password To Daal De.',
-            ]);
+        ]);
 
-        $email=$request->email;
-        $password=$request->password;
-        
-        $data=customer::where('email',$email)->first();  
-        if($data)
-        {
-            if(Hash::check($password,$data->password))
-            {
-                    session()->put('user_id',$data->id);
-					session()->put('email',$data->email);
-					session()->put('name',$data->cust_name);
+        $email = $request->email;
+        $password = $request->password;
 
-                    echo "<script> 
+        $data = customer::where('email', $email)->first();
+        if ($data) {
+            if (Hash::check($password, $data->password)) {
+                session()->put('user_id', $data->id);
+                session()->put('email', $data->email);
+                session()->put('name', $data->cust_name);
+
+                echo "<script> 
                     alert('Login Suuceess !');
                     window.location='/';
                     </script>";
-               
-            }
-            else
-            {
+            } else {
                 echo "<script> 
                         alert('Password not match !'); 
                         window.location='/user_login';
                     </script>";
-                   
-               
             }
-        }
-        else
-        {
+        } else {
             echo "<script>
                 alert('Username does not exits !');
                 window.location='/user_login';
              </script>";
-            
         }
-
     }
-    
+
     public function user_logout()
     {
         session()->pull('user_id');
         session()->pull('email');
         session()->pull('name');
-        
+
         echo "<script>
         alert('Logout Success !');
         window.location='/index';
      </script>";
-
     }
     /**
      * Store a newly created resource in storage.
@@ -140,20 +130,20 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'cust_name'=>'required|alpha:ascii',
-            'email'=> 'required|email|unique:customers',
-           'password'=> 'required|min:3|max:12',
+            'cust_name' => 'required|alpha:ascii',
+            'email' => 'required|email|unique:customers',
+            'password' => 'required|min:3|max:12',
         ]);
 
-        $data=new customer;
+        $data = new customer;
 
-        $data->cust_name=$request->cust_name;
-    $email=$data->email=$request->email;
-        $data->password=Hash::make($request->password);
-       
+        $data->cust_name = $request->cust_name;
+        $email = $data->email = $request->email;
+        $data->password = Hash::make($request->password);
+
 
         $data->save();
-        $emaildata=array("cust_name"=>$request->cust_name,"email"=>$request->email, "pass"=>$request->password);
+        $emaildata = array("cust_name" => $request->cust_name, "email" => $request->email, "pass" => $request->password);
         Mail::to($email)->send(new welcomemail($emaildata));
         echo "<script>
         alert('Signup Success !');
@@ -169,8 +159,8 @@ class CustomerController extends Controller
      */
     public function show(customer $customer)
     {
-        $data=customer::all();
-        return view('admin.manage_customer',['customer'=>$data]);
+        $data = customer::all();
+        return view('admin.manage_customer', ['customer' => $data]);
     }
 
     /**
@@ -191,7 +181,7 @@ class CustomerController extends Controller
      * @param  \App\Models\customer  $customer
      * @return \Illuminate\Http\Response
      */
-   
+
 
     /**
      * Remove the specified resource from storage.
@@ -201,7 +191,7 @@ class CustomerController extends Controller
      */
     public function destroy(customer $customer, $id)
     {
-        $data=customer::find($id);
+        $data = customer::find($id);
         $data->delete();
         return redirect('/manage_customer');
     }
@@ -217,7 +207,7 @@ class CustomerController extends Controller
     public function forget_otp(Request $request)
     {
         $data = customer::where("email", $request->email)->first();
-        if($data){
+        if ($data) {
             $email = $data->email;
             $id = $data->id;
 
@@ -226,16 +216,13 @@ class CustomerController extends Controller
             session()->put('ses_forget_id', $id);
             session()->put('ses_forget_otp', $otp);
 
-            $forget_data = array("otp"=>session()->get('ses_forget_otp'));
+            $forget_data = array("otp" => session()->get('ses_forget_otp'));
             Mail::to($email)->send(new forgetMail($forget_data));
             return redirect('/forget_otp');
-        }
-        else
-        {
+        } else {
             Alert::error('error', 'Username Not valid');
             return redirect('/forget_pass');
         }
-        
     }
     public function showForgetOtpForm()
     {
@@ -243,33 +230,122 @@ class CustomerController extends Controller
     }
     public function verify_otp(Request $request)
     {
-        
-        if(session()->get('ses_forget_otp') == $request->otp){
-            
+
+        if (session()->get('ses_forget_otp') == $request->otp) {
+
             session()->put('ses_reset_pass', "reset");
             session()->pull('ses_forget_otp');
-            
-            
+
+
             return redirect('/reset_pass');
-        }
-        else
-        {
+        } else {
             Alert::error('error', 'OTP is invalid');
             return redirect('/forget_otp');
         }
-        
     }
-    public function update_pass($id,Request $request)
+    public function update_pass($id, Request $request)
     {
-        $data=customer::find($id);
-        $data->password=Hash::make($request->password);
+        $data = customer::find($id);
+        $data->password = Hash::make($request->password);
         $data->update();
-        
+
         session()->pull('ses_reset_pass');
         session()->pull('ses_forget_id');
 
         Alert::success('Success', 'Reset Password Success');
         return redirect('/user_login');
     }
-    
+
+
+
+
+    //=================== API =========================================//
+    public function show_cust_api()
+    {
+        $data = customer::all();
+        return response()->json([
+            'status' => 200,
+            'customer' => $data
+        ]);
+    }
+    public function show_cust_single_api($id)
+    {
+        $data = customer::find($id);
+        return response()->json([
+            'status' => 200,
+            'students' => $data
+        ]);
+    }
+    public function delete_cust($id)
+    {
+        customer::find($id)->delete();
+        return response()->json([
+            'status' => 200,
+            'msg' => "Delete Success"
+        ]);
+    }
+
+    public function insert_cust(Request $request)
+    {
+
+        $validate = Validator::make($request->all(), [
+            'cust_name' => 'Required',
+            'email' => 'Required|email',
+            'password' => 'Required',
+            'file' => 'Required'
+        ]);
+
+        if ($validate->fails()) {
+            return [
+                'success' => 0,
+                'message' => $validate->messages(),
+            ];
+        } else {
+            $data = new customer();
+            $data->cust_name = $request->cust_name;
+            $data->email = $request->email;
+            $data->password = Hash::make($request->password);
+
+            $data->save();
+            return response()->json([
+                'status' => 200,
+                'message' => "Regioster Success"
+            ]);
+        }
+    }
+    public function update_cust(Request $request, $id)
+    {
+        $validate=Validator::make($request->all(),[
+            'cust_name'=>'Required',
+            'email'=>'Required|email',
+        ]);
+		
+		if($validate->fails())
+		{
+			return [
+				'success' => 0, 
+				'message' => $validate->messages(),
+			];
+		}
+		else
+		{
+			$data=customer::find($id);
+			$data->cust_name=$request->cust_name;
+			$data->email=$request->email;
+			$data->update();
+			return response()->json([
+			'status'=>200,
+			'message'=>"Update Success"
+			]);
+		}
+    }
+
+    function search($key) 	
+    {
+         $data=customer::where('cust_name','LIKE',"%$key%")->orWhere('email','LIKE','%'.$key.'%')->get();
+		 return response()->json([
+		 'status'=>200,
+		 'customer'=>$data
+		 ]);
+    }
 }

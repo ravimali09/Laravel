@@ -1,24 +1,19 @@
-
 @extends('admin.layout.structure')
 @section('main_code')
-<div class="content-wrapper" style="margin-left:250px; ">
-    <div class="container">
-        <div class="row pad-botm" style="margin-top:80px">
-       
+<div class="content-wrapper mt-4">
+    <div class="container ">
+        <div class="row ">
+            <div class="col-md-2 col-sm-3 col-xs-4">
+            </div>
 
-        </div>
-
-
-
-        <div class="row">
-
-            <div class="col-md-10 col-sm-10 col-xs-10">
-                <div class="panel panel-success">
+            <!-- Main Content -->
+            <div class="col-md-10 col-sm-9 col-xs-8 ">
+                <div class="panel panel-success" style="margin-top: 90px;">
                     <div class="panel-heading text-center">
                         Manage Contact
                     </div>
                     <div class="panel-body">
-                        <div class="table-responsive">
+                        <div class="table-responsive mt-4">
                             <table class="table table-striped table-bordered table-hover">
                                 <thead>
                                 <tr>
@@ -52,11 +47,7 @@
                     </div>
                 </div>
             </div>
-
         </div>
-
-
-
     </div>
 </div>
 @endsection
