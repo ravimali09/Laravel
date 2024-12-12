@@ -24,5 +24,4 @@ Route::get('/show_cust_single_api/{id}',[CustomerController::class,'show_cust_si
 Route::post('/insert_cust',[CustomerController::class,'insert_cust']);
 Route::put('/update_cust/{id}',[CustomerController::class,'update_cust']);
 Route::get('/search_cust/{key}',[CustomerController::class,'search']); 
-Route::put('/update_status/{id}',[CustomerController::class,'update_status']); 
 Route::post('/login',[CustomerController::class,'cust_login']); 

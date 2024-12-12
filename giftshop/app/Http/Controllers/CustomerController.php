@@ -273,7 +273,7 @@ class CustomerController extends Controller
         $data = customer::find($id);
         return response()->json([
             'status' => 200,
-            'students' => $data
+            'customer' => $data
         ]);
     }
     public function delete_cust($id)
@@ -309,7 +309,7 @@ class CustomerController extends Controller
             $data->save();
             return response()->json([
                 'status' => 200,
-                'message' => "Regioster Success"
+                'message' => "Register Success"
             ]);
         }
     }
@@ -348,4 +348,49 @@ class CustomerController extends Controller
 		 'customer'=>$data
 		 ]);
     }
+    public function cust_login(Request $request)
+	{
+		$validate=Validator::make($request->all(),[
+            'email'=>'Required|email',
+            'password'=>'Required'
+        ]);
+		
+		if($validate->fails())
+		{
+			return [
+				'success' => 0, 
+				'message' => $validate->messages(),
+			];
+		}
+		else
+		{
+			$customer=customer::where('email' , '=' , $request->email)->first();	
+			if(! $customer || ! Hash::check($request->password,$customer->password))
+			{
+				return response()->json([
+					'status'=>201,
+					'msg'=>"Login Failed due to Wrong Creadantial"
+					]);
+			}
+			else
+			{
+				
+				if($customer->status=="Unblock")
+				{
+					return response()->json([
+					'status'=>200,
+					'msg'=>"Login Success",
+					]);
+				}
+				else
+				{
+					return response()->json([
+					'status'=>201,
+					'msg'=>"Login Failed Due to Blocked Account"
+					]);
+				}	
+			}
+		}
+	
+	}
 }
