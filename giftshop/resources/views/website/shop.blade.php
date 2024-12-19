@@ -1,224 +1,58 @@
 @extends('website.layout.structure')
 @section('main_code')
 
-  <!-- shop section -->
 
-  <section class="shop_section layout_padding">
+<!-- Shop Section -->
+<section class="shop_section layout_padding">
     <div class="container">
-      <div class="heading_container heading_center">
-        <h2>
-          Latest Products
-        </h2>
-      </div>
-      <div class="row">
-        <div class="col-sm-6 col-md-4 col-lg-3">
-          <div class="box">
-            <a href="">
-              <div class="img-box">
-                <img src="{{url('website/images/p1.png')}}" alt="">
-              </div>
-              <div class="detail-box">
-                <h6>
-                  Ring
-                </h6>
-                <h6>
-                  Price
-                  <span>
-                    $200
-                  </span>
-                </h6>
-              </div>
-              <div class="new">
-                <span>
-                  New
-                </span>
-              </div>
-            </a>
-          </div>
+        <div class="heading_container heading_center">
+            <h2>Latest Products</h2>
         </div>
-        <div class="col-sm-6 col-md-4 col-lg-3">
-          <div class="box">
-            <a href="">
-              <div class="img-box">
-                <img src="{{url('website/images/p2.png')}}" alt="">
-              </div>
-              <div class="detail-box">
-                <h6>
-                  Watch
-                </h6>
-                <h6>
-                  Price
-                  <span>
-                    $300
-                  </span>
-                </h6>
-              </div>
-              <div class="new">
-                <span>
-                  New
-                </span>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3">
-          <div class="box">
-            <a href="">
-              <div class="img-box">
-                <img src="{{url('website/images/p3.png')}}" alt="">
-              </div>
-              <div class="detail-box">
-                <h6>
-                  Teddy Bear
-                </h6>
-                <h6>
-                  Price
-                  <span>
-                    $110
-                  </span>
-                </h6>
-              </div>
-              <div class="new">
-                <span>
-                  New
-                </span>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3">
-          <div class="box">
-            <a href="">
-              <div class="img-box">
-                <img src="{{url('website/images/p4.png')}}" alt="">
-              </div>
-              <div class="detail-box">
-                <h6>
-                  Flower Bouquet
-                </h6>
-                <h6>
-                  Price
-                  <span>
-                    $45
-                  </span>
-                </h6>
-              </div>
-              <div class="new">
-                <span>
-                  New
-                </span>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3">
-          <div class="box">
-            <a href="">
-              <div class="img-box">
-                <img src="{{url('website/images/p5.png')}}" alt="">
-              </div>
-              <div class="detail-box">
-                <h6>
-                  Teddy Bear
-                </h6>
-                <h6>
-                  Price
-                  <span>
-                    $95
-                  </span>
-                </h6>
-              </div>
-              <div class="new">
-                <span>
-                  New
-                </span>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3">
-          <div class="box">
-            <a href="">
-              <div class="img-box">
-                <img src="{{url('website/images/p6.png')}}" alt="">
-              </div>
-              <div class="detail-box">
-                <h6>
-                  Flower Bouquet
-                </h6>
-                <h6>
-                  Price
-                  <span>
-                    $70
-                  </span>
-                </h6>
-              </div>
-              <div class="new">
-                <span>
-                  New
-                </span>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3">
-          <div class="box">
-            <a href="">
-              <div class="img-box">
-                <img src="{{url('website/images/p7.png')}}" alt="">
-              </div>
-              <div class="detail-box">
-                <h6>
-                  Watch
-                </h6>
-                <h6>
-                  Price
-                  <span>
-                    $400
-                  </span>
-                </h6>
-              </div>
-              <div class="new">
-                <span>
-                  New
-                </span>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3">
-          <div class="box">
-            <a href="">
-              <div class="img-box">
-                <img src="{{url('website/images/p8.png')}}" alt="">
-              </div>
-              <div class="detail-box">
-                <h6>
-                  Ring
-                </h6>
-                <h6>
-                  Price
-                  <span>
-                    $450
-                  </span>
-                </h6>
-              </div>
-              <div class="new">
-                <span>
-                  New
-                </span>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="btn-box">
-        <a href="">
-          View All Products
-        </a>
-      </div>
-    </div>
-  </section>
 
-  <!-- end shop section -->
-  @endsection   
+        <div class="row">
+            @if(!empty($product) && $product->isNotEmpty())
+                @foreach($product as $item)
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="box" style="height: 380px; width:280px;">
+                        <div class="text-right mt-2 mr-3">
+                            <span>{{ $item->name }}</span>
+                        </div>
+                        <div class="img-box">
+                            <img src="{{ asset('website/upload/product/' . $item->image) }}" alt="{{ $item->name }}" class="img-fluid" style="height: 300px; width: 300px;">
+                        </div>
+                        <div class="detail-box">
+                            <h6>{{ $item->description }}</h6>
+                            <h6>Price: <span>$ {{ $item->price }}</span></h6>
+                        </div>
+                        <div class="new">
+                            <span>New</span>
+                        </div>
+                        <div class="text-center mt-2">
+                            <!-- PayPal Form -->
+                            <form method="post" action="https://www.sandbox.paypal.com/cgi-bin/webscr">
+                                @csrf
+                                <input type="hidden" name="business" value="sb-wad3w35034247@business.example.com">
+                                <input type="hidden" name="cmd" value="_xclick">
+                                <input type="hidden" name="item_name" value="{{ $item->name }}">
+                                <input type="hidden" name="amount" value="{{ $item->price }}">
+                                <input type="hidden" name="currency_code" value="USD">
+                                <input type="hidden" name="no_shipping" value="1">
+                                <input type="hidden" name="return" value="http://127.0.0.1:8000/success">
+                                <input type="hidden" name="cancel_return" value="http://127.0.0.1:8000/cancel">
+                                <button type="submit" class="btn btn-primary px-3">Buy Now</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            @else
+                <div class="col-12">
+                    <p class="text-center">No products available at the moment.</p>
+                </div>
+            @endif
+        </div>
+    </div>
+</section>
+<!-- End Shop Section -->
+
+@endsection

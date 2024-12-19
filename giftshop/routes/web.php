@@ -7,6 +7,8 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
+use App\Models\product;
+// use Illuminate\Http\Request;
 
 // use App\Http\Middleware\webbeforelogin;
 // use App\Http\Middleware\webafterlogin;
@@ -23,16 +25,19 @@ use App\Http\Controllers\ProductController;
 */
     /*------- Website ------*/
 Route::get('/', function () {
-    return view('website.index');
+    $data=product::all();
+    return view('website.index',['product'=>$data]);
 });
 Route::get('/index', function () {
-    return view('website.index');
+    $data=product::all();
+    return view('website.index',['product'=>$data]);
 });
 Route::get('/contacts', function () {
     return view('website.contact');
 });
 Route::get('/shop', function () {
-    return view('website.shop');
+    $data=product::all();
+    return view('website.shop',['product'=>$data]);
 });
 Route::get('/testimonial', function () {
     return view('website.testimonial');
@@ -40,6 +45,23 @@ Route::get('/testimonial', function () {
 Route::get('/why', function () {
     return view('website.why');
 });
+Route::get('/success', function () {
+    return view('website.success');
+});
+Route::get('/cancel', function () {
+    return view('website.cancel');
+});
+
+
+
+// Route::post('/process', function (Request $request) {
+//     // Log all form data
+//     Log::info('Form Data:', $request->all());
+
+//     // Return data to the browser for debugging
+//     return response()->json($request->all());
+// });
+
 
 Route::get('/user_login',[CustomerController::class,'login'])->middleware('before_web');
 Route::post('/user_auth',[CustomerController::class,'user_auth'])->middleware('before_web');
