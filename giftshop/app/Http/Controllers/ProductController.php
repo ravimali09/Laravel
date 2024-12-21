@@ -26,6 +26,11 @@ class ProductController extends Controller
     {
         return view('admin.add_product');
     }
+    public function shop()
+    {
+        $data = product::all();
+        return view('website.shop', ['product' => $data]);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -36,20 +41,20 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'=>'required|alpha:ascii',
-            'description'=> 'required',
-            'price'=> 'required|',
+            'name' => 'required|alpha:ascii',
+            'description' => 'required',
+            'price' => 'required|',
             'image' => 'required|image|max:2048'
         ]);
-        $data=new product;
+        $data = new product;
 
-        $data->name=$request->name;
-        $data->description=$request->description;
-        $data->price=$request->price;
-        $file=$request->file('image');
-        $filename=time()."_img.".$request->file('image')->getClientOriginalExtension(); 
-        $file->move('website/upload/product/',$filename); 
-        $data->image=$filename;
+        $data->name = $request->name;
+        $data->description = $request->description;
+        $data->price = $request->price;
+        $file = $request->file('image');
+        $filename = time() . "_img." . $request->file('image')->getClientOriginalExtension();
+        $file->move('website/upload/product/', $filename);
+        $data->image = $filename;
 
         $data->save();
         echo "<script>
@@ -66,8 +71,8 @@ class ProductController extends Controller
      */
     public function show(product $product)
     {
-        $data=product::all();
-        return view('admin.manage_product',['product'=>$data]);
+        $data = product::all();
+        return view('admin.manage_product', ['product' => $data]);
     }
 
     /**
@@ -101,7 +106,7 @@ class ProductController extends Controller
      */
     public function destroy(product $product, $id)
     {
-        $data=product::find($id);
+        $data = product::find($id);
         $data->delete();
         echo "<script>
         alert('Product Delete Success !');

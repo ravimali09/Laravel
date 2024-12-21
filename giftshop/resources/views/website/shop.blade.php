@@ -13,7 +13,7 @@
             @if(!empty($product) && $product->isNotEmpty())
                 @foreach($product as $item)
                 <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="box" style="height: 380px; width:280px;">
+                    <div class="box" >
                         <div class="text-right mt-2 mr-3">
                             <span>{{ $item->name }}</span>
                         </div>
@@ -22,7 +22,7 @@
                         </div>
                         <div class="detail-box">
                             <h6>{{ $item->description }}</h6>
-                            <h6>Price: <span>$ {{ $item->price }}</span></h6>
+                            <h6><span>${{ $item->price }}</span></h6>
                         </div>
                         <div class="new">
                             <span>New</span>

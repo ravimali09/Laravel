@@ -14,6 +14,7 @@
             'payer_name' => request('first_name') . ' ' . request('last_name'),
         ]);
     @endphp
+
 @endif
 
 <!DOCTYPE html>
@@ -31,7 +32,7 @@
 
     <div class="container mt-3">
 
-        <div class="alert alert-success">
+        <div class="alert alert-success text-success">
             <strong>Success!</strong> Payment has been received!
         </div>
         <table class="table table-bordered">

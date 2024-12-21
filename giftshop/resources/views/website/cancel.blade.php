@@ -19,7 +19,7 @@
 <body>
 
     <div class="container mt-3">
-        <div class="alert alert-danger">
+        <div class="alert alert-danger text-danger">
             <strong>Sorry!</strong> Your payment has been Cancelled..!
         </div>
     </div>

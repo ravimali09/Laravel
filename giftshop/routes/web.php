@@ -7,6 +7,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PaymentController;
 use App\Models\product;
 // use Illuminate\Http\Request;
 
@@ -35,10 +36,10 @@ Route::get('/index', function () {
 Route::get('/contacts', function () {
     return view('website.contact');
 });
-Route::get('/shop', function () {
-    $data=product::all();
-    return view('website.shop',['product'=>$data]);
-});
+// Route::get('/shop', function () {
+//     $data=product::all();
+//     return view('website.shop',['product'=>$data]);
+// });
 Route::get('/testimonial', function () {
     return view('website.testimonial');
 });
@@ -76,16 +77,16 @@ Route::get('/edituser/{id}',[CustomerController::class,'edituser'])->middleware(
 Route::post('/update/{id}',[CustomerController::class,'update'])->middleware('after_web');
 
 
+Route::get('/shop',[ProductController::class,'shop'])->middleware('after_web');
+Route::get('/store_payment', [PaymentController::class, 'store']);
+
+
   /* ------- Admin -------*/
 
 
 Route::get('/manage_contact',[ContactController::class,'show'])->middleware('after_adm');
 Route::post('/contacts',[ContactController::class,'store']);
 Route::post('/delete_contact/{$id}',[ContactController::class,'destroy'])->middleware('after_adm');
-
-
-  
-
 
 
 Route::get('/dashboard',[CustomerController::class,'adm_dashboard'])->middleware('after_adm');
